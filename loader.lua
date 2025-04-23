@@ -2,9 +2,9 @@
 local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/VeneraScript/fullpower/main/uinterface.lua"))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Venera ESP GUI",
+    Name = "Venerable HUB",
     LoadingTitle = "Initializing...",
-    LoadingSubtitle = "by VeneraScript",
+    LoadingSubtitle = "by Gween & Nier",
     ConfigurationSaving = {
         Enabled = false
     }
