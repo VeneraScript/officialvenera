@@ -1,3 +1,4 @@
+return Library
 --[[
 
 	Rayfield Interface Suite
@@ -3925,20 +3926,4 @@ end)
 return RayfieldLibrary
 
 
-
--- Tambahan fungsi untuk card-style (tidak dipanggil otomatis)
-function ApplyCardStyle(frame)
-   local corner = Instance.new("UICorner")
-   corner.CornerRadius = UDim.new(0, 12)
-   corner.Parent = frame
-
-   local shadow = Instance.new("ImageLabel")
-   shadow.Image = "rbxassetid://1316045217"
-   shadow.ImageTransparency = 0.8
-   shadow.Size = UDim2.new(1, 6, 1, 6)
-   shadow.Position = UDim2.new(0, -3, 0, -3)
-   shadow.BackgroundTransparency = 1
-   shadow.ZIndex = frame.ZIndex - 1
-   shadow.Name = "RayfieldCardShadow"
-   shadow.Parent = frame
-end
+return Library
