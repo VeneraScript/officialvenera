@@ -20,10 +20,6 @@ Venera.Colors = {
 Venera.UI = Instance.new("ScreenGui")
 Venera.UI.Name = "VeneraUI"
 Venera.UI.ZIndexBehavior = Enum.ZIndexBehavior.Global
-Venera.UI.Parent = CoreGui
-
--- Window Management
-Venera.Windows = {}
 
 -- Destroy any existing UI
 function Venera:Destroy()
@@ -198,98 +194,27 @@ function Venera:CreateToggle(config)
     return ToggleObject, ToggleFrame
 end
 
--- Tab Component
-function Venera:CreateTab(config)
-    local TabButton = Instance.new("TextButton")
-    TabButton.Name = config.Name or "Tab"
-    TabButton.Text = config.Name or "Tab"
-    TabButton.Font = Enum.Font.GothamMedium
-    TabButton.TextSize = 14
-    TabButton.TextColor3 = config.Active and self.Colors.Accent or self.Colors.MutedText
-    TabButton.Size = UDim2.new(1, 0, 0, 30)
-    TabButton.BackgroundColor3 = self.Colors.MainBg
-    TabButton.BorderSizePixel = 0
-    TabButton.AutoButtonColor = false
-    TabButton.ClipsDescendants = true
-
-    local buttonCorner = Instance.new("UICorner", TabButton)
-    buttonCorner.CornerRadius = UDim.new(0, 4)
+-- Label Component
+function Venera:CreateLabel(config)
+    local Label = Instance.new("TextLabel")
+    Label.Text = config.Text or "Label"
+    Label.Font = Enum.Font.GothamMedium
+    Label.TextSize = config.TextSize or 14
+    Label.TextColor3 = config.TextColor or self.Colors.Text
+    Label.TextXAlignment = config.Alignment or Enum.TextXAlignment.Left
+    Label.BackgroundTransparency = 1
+    Label.Size = config.Size or UDim2.new(1, 0, 0, 20)
     
-    local buttonStroke = Instance.new("UIStroke", TabButton)
-    buttonStroke.Color = self.Colors.Border
-    buttonStroke.Thickness = 1
-    buttonStroke.LineJoinMode = Enum.LineJoinMode.Round
-
-    local Underline = Instance.new("Frame", TabButton)
-    Underline.Size = UDim2.new(0, config.Active and 30 or 0, 0, 2)
-    Underline.Position = UDim2.new(0.5, config.Active and -15 or 0, 1, -2)
-    Underline.BackgroundColor3 = config.Active and self.Colors.Accent or Color3.new(0, 0, 0)
-    Underline.BorderSizePixel = 0
-
-    local hoverFrame = Instance.new("Frame", TabButton)
-    hoverFrame.Size = UDim2.new(1, 0, 1, 0)
-    hoverFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    hoverFrame.BackgroundTransparency = 1
-    hoverFrame.ZIndex = -1
-    Instance.new("UICorner", hoverFrame).CornerRadius = UDim.new(0, 4)
-
-    local pressFrame = Instance.new("Frame", TabButton)
-    pressFrame.Size = UDim2.new(1, 0, 1, 0)
-    pressFrame.BackgroundColor3 = self.Colors.Accent
-    pressFrame.BackgroundTransparency = 0.9
-    pressFrame.ZIndex = -1
-    pressFrame.Visible = false
-    Instance.new("UICorner", pressFrame).CornerRadius = UDim.new(0, 4)
-
-    local originalSize = TabButton.Size
-    local originalPosition = TabButton.Position
-
-    TabButton.MouseEnter:Connect(function()
-        TweenService:Create(TabButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-            Size = originalSize + UDim2.new(0.05, 0, 0.05, 0),
-            Position = originalPosition - UDim2.new(0.025, 0, 0.025, 0)
-        }):Play()
-        
-        TweenService:Create(hoverFrame, TweenInfo.new(0.2), {BackgroundTransparency = 0.8}):Play()
-        if TabButton.TextColor3 ~= self.Colors.Accent then
-            TweenService:Create(TabButton, TweenInfo.new(0.2), {TextColor3 = Color3.new(1, 1, 1)}):Play()
-        end
-    end)
-
-    TabButton.MouseLeave:Connect(function()
-        TweenService:Create(TabButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-            Size = originalSize,
-            Position = originalPosition
-        }):Play()
-        
-        TweenService:Create(hoverFrame, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
-        if TabButton.TextColor3 ~= self.Colors.Accent then
-            TweenService:Create(TabButton, TweenInfo.new(0.2), {TextColor3 = self.Colors.MutedText}):Play()
-        end
-    end)
-
-    TabButton.MouseButton1Down:Connect(function()
-        pressFrame.Visible = true
-        TweenService:Create(pressFrame, TweenInfo.new(0.1), {BackgroundTransparency = 0.7}):Play()
-        TweenService:Create(TabButton, TweenInfo.new(0.1), {Position = TabButton.Position + UDim2.new(0, 0, 0, 1)}):Play()
-    end)
-
-    TabButton.MouseButton1Up:Connect(function()
-        TweenService:Create(pressFrame, TweenInfo.new(0.1), {BackgroundTransparency = 0.9}):Play()
-        TweenService:Create(TabButton, TweenInfo.new(0.1), {Position = TabButton.Position - UDim2.new(0, 0, 0, 1)}):Play()
-        task.wait(0.1)
-        pressFrame.Visible = false
-    end)
-
     if config.Parent then
-        TabButton.Parent = config.Parent
+        Label.Parent = config.Parent
     end
 
-    return TabButton, Underline
+    return Label
 end
 
 -- Window Component
 function Venera:CreateWindow(config)
+    -- Destroy existing UI if any
     if CoreGui:FindFirstChild("VeneraUI") then 
         CoreGui.VeneraUI:Destroy() 
     end
@@ -463,7 +388,7 @@ function Venera:CreateWindow(config)
     sidebarStroke.Thickness = 1
     sidebarStroke.LineJoinMode = Enum.LineJoinMode.Round
 
-    -- Sidebar Buttons
+    -- Sidebar Buttons Container
     local ButtonContainer = Instance.new("Frame", TabButtons)
     ButtonContainer.Size = UDim2.new(1, -15, 1, -10)
     ButtonContainer.Position = UDim2.new(0, 10, 0, 5)
@@ -479,6 +404,7 @@ function Venera:CreateWindow(config)
     ContentArea.Size = UDim2.new(1, -150, 1, -80)
     ContentArea.Position = UDim2.new(0, 140, 0, 40)
     ContentArea.BackgroundTransparency = 1
+    ContentArea.Name = "ContentArea"
 
     -- Bottom Footer
     local BottomHeader = Instance.new("Frame", Window)
@@ -539,95 +465,101 @@ function Venera:CreateWindow(config)
     local ActiveTab = nil
 
     function Tabs:CreateTab(tabConfig)
-        local TabButton, Underline = self:CreateTab({
-            Name = tabConfig.Name,
-            Active = #ButtonContainer:GetChildren() == 1, -- First tab is active by default
-            Parent = ButtonContainer
-        })
+        -- Create tab button
+        local TabButton = Instance.new("TextButton")
+        TabButton.Name = tabConfig.Name
+        TabButton.Text = tabConfig.Name
+        TabButton.Font = Enum.Font.GothamMedium
+        TabButton.TextSize = 14
+        TabButton.TextColor3 = #ButtonContainer:GetChildren() == 1 and self.Colors.Accent or self.Colors.MutedText
+        TabButton.Size = UDim2.new(1, 0, 0, 30)
+        TabButton.BackgroundColor3 = self.Colors.MainBg
+        TabButton.BorderSizePixel = 0
+        TabButton.AutoButtonColor = false
+        TabButton.ClipsDescendants = true
+        TabButton.Parent = ButtonContainer
 
-        local TabFrame = Instance.new("Frame", ContentArea)
+        local buttonCorner = Instance.new("UICorner", TabButton)
+        buttonCorner.CornerRadius = UDim.new(0, 4)
+        
+        local buttonStroke = Instance.new("UIStroke", TabButton)
+        buttonStroke.Color = self.Colors.Border
+        buttonStroke.Thickness = 1
+
+        -- Underline indicator
+        local Underline = Instance.new("Frame", TabButton)
+        Underline.Size = UDim2.new(0, #ButtonContainer:GetChildren() == 1 and 30 or 0, 0, 2)
+        Underline.Position = UDim2.new(0.5, #ButtonContainer:GetChildren() == 1 and -15 or 0, 1, -2)
+        Underline.BackgroundColor3 = #ButtonContainer:GetChildren() == 1 and self.Colors.Accent or Color3.new(0, 0, 0)
+        Underline.BorderSizePixel = 0
+
+        -- Create tab content frame
+        local TabFrame = Instance.new("ScrollingFrame", ContentArea)
+        TabFrame.Name = tabConfig.Name.."Content"
         TabFrame.Size = UDim2.new(1, 0, 1, 0)
         TabFrame.BackgroundTransparency = 1
-        TabFrame.Visible = #ButtonContainer:GetChildren() == 2 -- First tab is visible by default
+        TabFrame.Visible = #ButtonContainer:GetChildren() == 1
+        TabFrame.ScrollBarThickness = 5
+        TabFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+        TabFrame.ScrollBarImageColor3 = self.Colors.Accent
 
-        -- Create scroll frame for content
-        local ScrollFrame = Instance.new("ScrollingFrame", TabFrame)
-        ScrollFrame.Size = UDim2.new(1, 0, 1, 0)
-        ScrollFrame.BackgroundTransparency = 1
-        ScrollFrame.ScrollBarThickness = 5
-        ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-        ScrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-        ScrollFrame.ScrollBarImageColor3 = self.Colors.Accent
-
-        local ContentLayout = Instance.new("UIListLayout", ScrollFrame)
+        local ContentLayout = Instance.new("UIListLayout", TabFrame)
         ContentLayout.Padding = UDim.new(0, 10)
         ContentLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
+        -- Tab button interactions
         TabButton.MouseButton1Click:Connect(function()
-            for _, frame in pairs(ContentArea:GetChildren()) do
-                if frame:IsA("Frame") then
-                    frame.Visible = false
+            -- Hide all tabs
+            for _, child in pairs(ContentArea:GetChildren()) do
+                if child:IsA("ScrollingFrame") then
+                    child.Visible = false
                 end
             end
             
+            -- Show this tab
             TabFrame.Visible = true
             ActiveTab = tabConfig.Name
 
+            -- Update all tab buttons appearance
             for _, btn in pairs(ButtonContainer:GetChildren()) do
                 if btn:IsA("TextButton") then
                     btn.TextColor3 = self.Colors.MutedText
                     local line = btn:FindFirstChildOfClass("Frame")
-                    if line then line.BackgroundColor3 = Color3.new(0, 0, 0) end
+                    if line then
+                        line.BackgroundColor3 = Color3.new(0, 0, 0)
+                    end
                 end
             end
 
+            -- Update active tab appearance
             TabButton.TextColor3 = self.Colors.Accent
             Underline.BackgroundColor3 = self.Colors.Accent
             Underline.Size = UDim2.new(0, 10, 0, 2)
             Underline.Position = UDim2.new(0.5, -5, 1, -2)
 
+            -- Animate underline
             TweenService:Create(Underline, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {
                 Size = UDim2.new(0, 30, 0, 2),
                 Position = UDim2.new(0.5, -15, 1, -2)
             }):Play()
         end)
 
+        -- Return tab object with methods to add elements
         local Tab = {}
         
         function Tab:CreateButton(btnConfig)
-            return self:CreateButton({
-                Text = btnConfig.Text,
-                Callback = btnConfig.Callback,
-                Parent = ScrollFrame
-            })
+            btnConfig.Parent = TabFrame
+            return Venera:CreateButton(btnConfig)
         end
         
         function Tab:CreateToggle(toggleConfig)
-            return self:CreateToggle({
-                Text = toggleConfig.Text,
-                Default = toggleConfig.Default,
-                Callback = toggleConfig.Callback,
-                Parent = ScrollFrame
-            })
+            toggleConfig.Parent = TabFrame
+            return Venera:CreateToggle(toggleConfig)
         end
         
         function Tab:CreateLabel(labelConfig)
-            local Label = Instance.new("TextLabel")
-            Label.Text = labelConfig.Text
-            Label.Font = Enum.Font.GothamMedium
-            Label.TextSize = labelConfig.TextSize or 14
-            Label.TextColor3 = labelConfig.TextColor or self.Colors.Text
-            Label.TextXAlignment = labelConfig.Alignment or Enum.TextXAlignment.Left
-            Label.BackgroundTransparency = 1
-            Label.Size = labelConfig.Size or UDim2.new(1, 0, 0, 20)
-            
-            if labelConfig.Parent then
-                Label.Parent = labelConfig.Parent
-            else
-                Label.Parent = ScrollFrame
-            end
-            
-            return Label
+            labelConfig.Parent = labelConfig.Parent or TabFrame
+            return Venera:CreateLabel(labelConfig)
         end
 
         return Tab
