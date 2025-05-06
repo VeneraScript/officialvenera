@@ -1,4 +1,4 @@
--- ✅ Inisialisasi Rayfield GUI
+-- ✅ Load Rayfield GUI
 local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/VeneraScript/fullpower/main/uinterface.lua"))()
 
 local Window = Rayfield:CreateWindow({
@@ -12,11 +12,11 @@ local Window = Rayfield:CreateWindow({
 
 local VisualTab = Window:CreateTab("Visual", 4483362458)
 
--- ✅ Sistem ESP yang Lebih Stabil
+-- ✅ Inisialisasi ESP
 local ESP = {
     Players = false,
     Mobs = false,
-    Objects = setmetatable({}, {__mode = "kv"}), -- Weak table untuk garbage collection
+    Objects = setmetatable({}, {__mode = "kv"}),
     Colors = {
         Players = Color3.fromRGB(0, 200, 255),
         Unicorn = Color3.fromRGB(255, 182, 193),
@@ -27,152 +27,176 @@ local ESP = {
     }
 }
 
--- Sistem Drawing yang Dioptimalkan
-local drawings = {}
-local function CreateDrawing(type, props)
-    local drawing = Drawing.new(type)
-    for prop, value in pairs(props) do
-        drawing[prop] = value
-    end
-    table.insert(drawings, drawing)
-    return drawing
+-- ✅ Fungsi buat line ESP
+local function CreateLine(color)
+    local line = Drawing.new("Line")
+    line.Thickness = 2
+    line.Transparency = 1
+    line.Color = color
+    line.Visible = false
+    return line
 end
 
--- Sistem ESP Object yang Lebih Kuat
-function ESP:TrackObject(obj, options)
-    if not obj or not obj.Parent then return end
-    if self.Objects[obj] then return end -- Skip jika sudah ada
-    
+local function CreateText(color, size)
+    local text = Drawing.new("Text")
+    text.Size = size
+    text.Color = color
+    text.Center = true
+    text.Outline = true
+    text.Visible = false
+    return text
+end
+
+-- ✅ Tracking objek
+function ESP:TrackObject(obj, data)
+    if not obj or not obj:IsA("Model") or self.Objects[obj] then return end
+    local root = data.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart")
+    if not root then return end
+
+    local color = data.Color or self.Colors.Players
+
     local box = {
         Object = obj,
-        Player = options.Player,
-        PrimaryPart = options.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart"),
-        Name = options.Name or obj.Name,
-        Color = options.Color or self.Colors.Players,
+        PrimaryPart = root,
+        Name = data.Name or obj.Name,
+        IsPlayer = data.IsPlayer or false,
         Drawings = {
-            Box = CreateDrawing("Quad", {
-                Thickness = 2,
-                Color = options.Color or self.Colors.Players,
-                Transparency = 1,
-                Filled = false,
-                Visible = false
-            }),
-            Name = CreateDrawing("Text", {
-                Text = options.Name or obj.Name,
-                Color = options.Color or self.Colors.Players,
-                Center = true,
-                Outline = true,
-                Size = 19,
-                Visible = false
-            }),
-            Distance = CreateDrawing("Text", {
-                Color = options.Color or self.Colors.Players,
-                Center = true,
-                Outline = true,
-                Size = 19,
-                Visible = false
-            })
+            TL = CreateLine(color),
+            TR = CreateLine(color),
+            BL = CreateLine(color),
+            BR = CreateLine(color),
+            Name = CreateText(color, 19),
+            Distance = CreateText(color, 19)
         },
         Connections = {}
     }
-    
-    if not box.PrimaryPart then
-        for _, drawing in pairs(box.Drawings) do
-            drawing:Remove()
-        end
-        return
-    end
-    
-    -- Sistem tracking yang lebih baik
+
     box.Connections.ancestry = obj.AncestryChanged:Connect(function(_, parent)
-        if parent == nil then
-            self:UntrackObject(obj)
-        end
+        if parent == nil then self:UntrackObject(obj) end
     end)
-    
-    box.Connections.primaryPart = box.PrimaryPart:GetPropertyChangedSignal("Parent"):Connect(function()
-        if not box.PrimaryPart or not box.PrimaryPart.Parent then
-            self:UntrackObject(obj)
-        end
+
+    box.Connections.primary = root:GetPropertyChangedSignal("Parent"):Connect(function()
+        if not root.Parent then self:UntrackObject(obj) end
     end)
-    
+
     self.Objects[obj] = box
-    self:UpdateObjectVisibility(box)
-    return box
 end
 
 function ESP:UntrackObject(obj)
-    if not self.Objects[obj] then return end
-    
     local box = self.Objects[obj]
-    
-    -- Hapus semua koneksi
+    if not box then return end
+
+    for _, d in pairs(box.Drawings) do
+        if typeof(d) == "Instance" or typeof(d) == "Drawing" then
+            d:Remove()
+        end
+    end
+
     for _, conn in pairs(box.Connections) do
         conn:Disconnect()
     end
-    
-    -- Hapus semua drawing
-    for _, drawing in pairs(box.Drawings) do
-        drawing:Remove()
-    end
-    
+
     self.Objects[obj] = nil
 end
 
-function ESP:UpdateObjectVisibility(box)
-    if not box or not box.Object or not box.PrimaryPart then return end
-    
-    local visible = (box.Player and self.Players) or (not box.Player and self.Mobs)
-    
-    for _, drawing in pairs(box.Drawings) do
-        drawing.Visible = visible
-    end
-end
-
-function ESP:UpdateAllVisibility()
+function ESP:UpdateAll()
     for obj, box in pairs(self.Objects) do
-        if obj and obj.Parent and box.PrimaryPart and box.PrimaryPart.Parent then
-            self:UpdateObjectVisibility(box)
-        else
+        if not obj or not box.PrimaryPart or not obj:IsDescendantOf(game) then
             self:UntrackObject(obj)
         end
     end
 end
 
--- Player ESP dengan sistem yang lebih baik
+-- ✅ Loop render ESP
+local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-local function TrackPlayer(player)
-    if player == LocalPlayer then return end
-    
-    local function HandleCharacter(char)
-        if not char then return end
-        
-        local humanoidRootPart = char:WaitForChild("HumanoidRootPart", 2)
-        if humanoidRootPart then
+RunService.RenderStepped:Connect(function()
+    local cam = workspace.CurrentCamera
+    if not cam then return end
+
+    for obj, box in pairs(ESP.Objects) do
+        local root = box.PrimaryPart
+        if not root then continue end
+
+        local pos, onScreen = cam:WorldToViewportPoint(root.Position)
+        local show = (box.IsPlayer and ESP.Players) or (not box.IsPlayer and ESP.Mobs)
+
+        if onScreen and show then
+            local size = Vector3.new(4, 6, 0)
+            local corners = {
+                cam:WorldToViewportPoint((root.CFrame * CFrame.new(-2, -3, 0)).Position),
+                cam:WorldToViewportPoint((root.CFrame * CFrame.new(2, -3, 0)).Position),
+                cam:WorldToViewportPoint((root.CFrame * CFrame.new(-2, 3, 0)).Position),
+                cam:WorldToViewportPoint((root.CFrame * CFrame.new(2, 3, 0)).Position)
+            }
+
+            box.Drawings.TL.From = Vector2.new(corners[1].X, corners[1].Y)
+            box.Drawings.TL.To   = Vector2.new(corners[2].X, corners[2].Y)
+
+            box.Drawings.BL.From = Vector2.new(corners[3].X, corners[3].Y)
+            box.Drawings.BL.To   = Vector2.new(corners[4].X, corners[4].Y)
+
+            box.Drawings.TR.From = Vector2.new(corners[1].X, corners[1].Y)
+            box.Drawings.TR.To   = Vector2.new(corners[3].X, corners[3].Y)
+
+            box.Drawings.BR.From = Vector2.new(corners[2].X, corners[2].Y)
+            box.Drawings.BR.To   = Vector2.new(corners[4].X, corners[4].Y)
+
+            for _, l in ipairs({box.Drawings.TL, box.Drawings.BL, box.Drawings.TR, box.Drawings.BR}) do
+                l.Visible = true
+            end
+
+            box.Drawings.Name.Text = box.Name
+            box.Drawings.Name.Position = Vector2.new(pos.X, pos.Y - 30)
+            box.Drawings.Name.Visible = true
+
+            local dist = LocalPlayer:FindFirstChild("Character") and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local distance = dist and (dist.Position - root.Position).Magnitude or 0
+
+            box.Drawings.Distance.Text = string.format("%.1f m", distance)
+            box.Drawings.Distance.Position = Vector2.new(pos.X, pos.Y - 10)
+            box.Drawings.Distance.Visible = true
+        else
+            for _, d in pairs(box.Drawings) do
+                d.Visible = false
+            end
+        end
+    end
+end)
+
+-- ✅ Tracking Player
+local function TrackPlayer(p)
+    if p == LocalPlayer then return end
+    p.CharacterAdded:Connect(function(char)
+        local root = char:WaitForChild("HumanoidRootPart", 3)
+        if root then
             ESP:TrackObject(char, {
-                Player = player,
-                Name = player.DisplayName or player.Name,
+                IsPlayer = true,
+                Name = p.DisplayName or p.Name,
                 Color = ESP.Colors.Players,
-                PrimaryPart = humanoidRootPart
+                PrimaryPart = root
+            })
+        end
+    end)
+    if p.Character then
+        local root = p.Character:FindFirstChild("HumanoidRootPart")
+        if root then
+            ESP:TrackObject(p.Character, {
+                IsPlayer = true,
+                Name = p.DisplayName or p.Name,
+                Color = ESP.Colors.Players,
+                PrimaryPart = root
             })
         end
     end
-    
-    player.CharacterAdded:Connect(HandleCharacter)
-    if player.Character then
-        HandleCharacter(player.Character)
-    end
 end
 
--- Inisialisasi player
-for _, player in ipairs(Players:GetPlayers()) do
-    TrackPlayer(player)
-end
+for _, p in ipairs(Players:GetPlayers()) do TrackPlayer(p) end
 Players.PlayerAdded:Connect(TrackPlayer)
 
--- Sistem Mobs ESP yang benar-benar stabil
+-- ✅ Tracking Mob
 local mobTypes = {
     ["unicorn"] = ESP.Colors.Unicorn,
     ["outlaw"] = ESP.Colors.Outlaw,
@@ -181,150 +205,48 @@ local mobTypes = {
     ["vampire"] = ESP.Colors.Vampire
 }
 
-local mobCache = {}
 local function TrackMob(mob)
-    if not mob or not mob:IsA("Model") or mobCache[mob] then return end
-    
+    if not mob:IsA("Model") then return end
+    if ESP.Objects[mob] then return end
     local humanoid = mob:FindFirstChildOfClass("Humanoid")
     if not humanoid then return end
-    
-    local name = mob.Name:lower()
-    local color
-    
-    for mobType, mobColor in pairs(mobTypes) do
-        if name:find(mobType) then
-            color = mobColor
-            break
-        end
-    end
-    
-    if color then
-        local humanoidRootPart = mob:FindFirstChild("HumanoidRootPart") or mob:FindFirstChildWhichIsA("BasePart")
-        if humanoidRootPart then
-            mobCache[mob] = true
+    local root = mob:FindFirstChild("HumanoidRootPart") or mob:FindFirstChildWhichIsA("BasePart")
+    if not root then return end
+
+    for name, color in pairs(mobTypes) do
+        if mob.Name:lower():find(name) then
             ESP:TrackObject(mob, {
                 Name = mob.Name,
                 Color = color,
-                PrimaryPart = humanoidRootPart
+                PrimaryPart = root
             })
-            
-            mob.AncestryChanged:Connect(function(_, parent)
-                if parent == nil then
-                    mobCache[mob] = nil
-                end
-            end)
+            break
         end
     end
 end
 
--- Fungsi untuk scan ulang semua mob di workspace
-local function FullMobScan()
-    for _, mob in ipairs(workspace:GetDescendants()) do
-        TrackMob(mob)
-    end
+for _, mob in ipairs(workspace:GetDescendants()) do
+    TrackMob(mob)
 end
 
--- Scan awal untuk mob yang sudah ada
-FullMobScan()
-
--- Deteksi mob baru dengan sistem yang lebih baik
 workspace.DescendantAdded:Connect(function(mob)
-    -- Tunggu sebentar untuk memastikan model terload sepenuhnya
-    wait(0.1)
+    task.wait(0.1)
     TrackMob(mob)
 end)
 
--- Render loop yang dioptimalkan
-local RunService = game:GetService("RunService")
-local heartbeat = RunService.Heartbeat
-
--- Tambahkan sistem refresh periodik untuk memastikan tidak ada mob yang terlewat
-local lastScanTime = 0
-local scanInterval = 5 -- Detik
-
-heartbeat:Connect(function(deltaTime)
-    local camera = workspace.CurrentCamera
-    if not camera then return end
-    
-    -- Update semua ESP objects
-    for obj, box in pairs(ESP.Objects) do
-        if obj and obj.Parent and box.PrimaryPart and box.PrimaryPart.Parent then
-            local position = box.PrimaryPart.Position
-            local screenPosition, onScreen = camera:WorldToViewportPoint(position)
-            
-            if onScreen then
-                local distance = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) 
-                    and (position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude 
-                    or 0
-                
-                -- Update box
-                if box.Drawings.Box then
-                    local size = Vector3.new(4, 6, 0)
-                    local corners = {
-                        camera:WorldToViewportPoint((box.PrimaryPart.CFrame * CFrame.new(-size.X/2, -size.Y/2, 0)).p),
-                        camera:WorldToViewportPoint((box.PrimaryPart.CFrame * CFrame.new(size.X/2, -size.Y/2, 0)).p),
-                        camera:WorldToViewportPoint((box.PrimaryPart.CFrame * CFrame.new(size.X/2, size.Y/2, 0)).p),
-                        camera:WorldToViewportPoint((box.PrimaryPart.CFrame * CFrame.new(-size.X/2, size.Y/2, 0)).p)
-                    }
-                    
-                    if #corners == 4 then
-                        box.Drawings.Box.PointA = Vector2.new(corners[1].X, corners[1].Y)
-                        box.Drawings.Box.PointB = Vector2.new(corners[2].X, corners[2].Y)
-                        box.Drawings.Box.PointC = Vector2.new(corners[3].X, corners[3].Y)
-                        box.Drawings.Box.PointD = Vector2.new(corners[4].X, corners[4].Y)
-                        box.Drawings.Box.Visible = (box.Player and ESP.Players) or (not box.Player and ESP.Mobs)
-                    end
-                end
-                
-                -- Update name dan distance
-                if box.Drawings.Name then
-                    box.Drawings.Name.Position = Vector2.new(screenPosition.X, screenPosition.Y - 30)
-                    box.Drawings.Name.Text = box.Name
-                    box.Drawings.Name.Visible = (box.Player and ESP.Players) or (not box.Player and ESP.Mobs)
-                end
-                
-                if box.Drawings.Distance then
-                    box.Drawings.Distance.Position = Vector2.new(screenPosition.X, screenPosition.Y - 10)
-                    box.Drawings.Distance.Text = string.format("%.1f m", distance)
-                    box.Drawings.Distance.Visible = (box.Player and ESP.Players) or (not box.Player and ESP.Mobs)
-                end
-            else
-                if box.Drawings.Box then box.Drawings.Box.Visible = false end
-                if box.Drawings.Name then box.Drawings.Name.Visible = false end
-                if box.Drawings.Distance then box.Drawings.Distance.Visible = false end
-            end
-        else
-            ESP:UntrackObject(obj)
-        end
-    end
-    
-    -- Lakukan scan ulang secara periodik
-    lastScanTime = lastScanTime + deltaTime
-    if lastScanTime >= scanInterval then
-        lastScanTime = 0
-        FullMobScan()
-    end
-end)
-
--- ✅ Toggle ESP
+-- ✅ UI Toggle
 VisualTab:CreateToggle({
     Name = "Player ESP",
     CurrentValue = false,
-    Callback = function(Value)
-        ESP.Players = Value
-        ESP:UpdateAllVisibility()
-    end,
+    Callback = function(val)
+        ESP.Players = val
+    end
 })
 
 VisualTab:CreateToggle({
     Name = "Mobs ESP",
     CurrentValue = false,
-    Callback = function(Value)
-        ESP.Mobs = Value
-        ESP:UpdateAllVisibility()
-        -- Lakukan scan ulang saat mengaktifkan mob ESP
-        if Value then
-            FullMobScan()
-        end
-    end,
+    Callback = function(val)
+        ESP.Mobs = val
+    end
 })
