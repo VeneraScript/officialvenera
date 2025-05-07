@@ -31,7 +31,7 @@ function Luxt1.CreateWindow(libName, logoId)
     key1.ZIndex = 2
     key1.Font = Enum.Font.GothamSemibold
     key1.Text = "LeftAlt"
-    key1.TextColor3 = Color3.fromRGB(153, 255, 238)
+    key1.TextColor3 = Color3.fromRGB(120, 81, 169)
     key1.TextSize = 14.000
 
     local oldKey = Enum.KeyCode.LeftAlt.Name
@@ -62,14 +62,14 @@ function Luxt1.CreateWindow(libName, logoId)
 
     keybindInfo1.Name = "keybindInfo"
     keybindInfo1.Parent = sideHeading
-    keybindInfo1.BackgroundColor3 = darkPurple
+    keybindInfo1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     keybindInfo1.BackgroundTransparency = 1.000
     keybindInfo1.Position = UDim2.new(0.585064113, 0, 0.935261846, 0)
     keybindInfo1.Size = UDim2.new(0, 50, 0, 22)
     keybindInfo1.ZIndex = 2
     keybindInfo1.Font = Enum.Font.GothamSemibold
     keybindInfo1.Text = "Close"
-    keybindInfo1.TextColor3 = darkPurple
+    keybindInfo1.TextColor3 = Color3.fromRGB(255, 255, 255)
     keybindInfo1.TextSize = 13.000
     keybindInfo1.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -151,14 +151,14 @@ function Luxt1.CreateWindow(libName, logoId)
 
     hubName.Name = "hubName"
     hubName.Parent = sideHeading
-    hubName.BackgroundColor3 = darkPurple
+    hubName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     hubName.BackgroundTransparency = 1.000
     hubName.Position = UDim2.new(0.290000081, 0, 0.0299999975, 0)
     hubName.Size = UDim2.new(0, 110, 0, 16)
     hubName.ZIndex = 2
     hubName.Font = Enum.Font.GothamSemibold
     hubName.Text = libName
-    hubName.TextColor3 = Color3.fromRGB(153, 255, 238)
+    hubName.TextColor3 = Color3.fromRGB(120, 81, 169)
     hubName.TextSize = 14.000
     hubName.TextWrapped = true
     hubName.TextXAlignment = Enum.TextXAlignment.Left
@@ -166,7 +166,7 @@ function Luxt1.CreateWindow(libName, logoId)
     tabFrame.Name = "tabFrame"
     tabFrame.Parent = sideHeading
     tabFrame.Active = true
-    tabFrame.BackgroundColor3 = darkPurple
+    tabFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     tabFrame.BackgroundTransparency = 1.000
     tabFrame.BorderSizePixel = 0
     tabFrame.Position = UDim2.new(0.0761478543, 0, 0.126385808, 0)
@@ -180,7 +180,7 @@ function Luxt1.CreateWindow(libName, logoId)
 
     usename.Name = "usename"
     usename.Parent = sideHeading
-    usename.BackgroundColor3 = darkPurple
+    usename.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     usename.BackgroundTransparency = 1.000
     usename.Position = UDim2.new(0.290000081, 0, 0.0700000152, 0)
     usename.Size = UDim2.new(0, 110, 0, 16)
@@ -198,7 +198,7 @@ function Luxt1.CreateWindow(libName, logoId)
 
     wave.Name = "wave"
     wave.Parent = MainFrame
-    wave.BackgroundColor3 = darkPurple
+    wave.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     wave.BackgroundTransparency = 1.000
     wave.Position = UDim2.new(0.0213434305, 0, 0, 0)
     wave.Size = UDim2.new(0.97865659, 0, 0.557522118, 0)
@@ -213,7 +213,7 @@ function Luxt1.CreateWindow(libName, logoId)
 
     framesAll.Name = "framesAll"
     framesAll.Parent = MainFrame
-    framesAll.BackgroundColor3 = darkPurple
+    framesAll.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     framesAll.BackgroundTransparency = 1.000
     framesAll.BorderSizePixel = 0
     framesAll.Position = UDim2.new(0.296564192, 0, 0.0242873337, 0)
@@ -222,13 +222,13 @@ function Luxt1.CreateWindow(libName, logoId)
 
     shadow.Name = "shadow"
     shadow.Parent = LuxtLib
-    shadow.BackgroundColor3 = darkPurple
+    shadow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     shadow.BackgroundTransparency = 1.000
     shadow.Position = UDim2.new(0.319562584, 0, 0.168689325, 0)
     shadow.Size = UDim2.new(0, 609, 0, 530)
     shadow.ZIndex = 0
     shadow.Image = "http://www.roblox.com/asset/?id=6105530152"
-    shadow.ImageColor3 = bgBlack
+    shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
     shadow.ImageTransparency = 0.200
 
     local TabHandling = {}
@@ -244,7 +244,7 @@ function Luxt1.CreateWindow(libName, logoId)
 
         tabBtnFrame.Name = "tabBtnFrame"
         tabBtnFrame.Parent = tabFrame
-        tabBtnFrame.BackgroundColor3 = darkPurple
+        tabBtnFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         tabBtnFrame.BackgroundTransparency = 1.000
         tabBtnFrame.Size = UDim2.new(0, 135, 0, 30)
         tabBtnFrame.ZIndex = 2
@@ -258,14 +258,14 @@ function Luxt1.CreateWindow(libName, logoId)
         tabBtn.ZIndex = 2
         tabBtn.Font = Enum.Font.Gotham
         tabBtn.Text = tabText
-        tabBtn.TextColor3 = Color3.fromRGB(153, 255, 238)
+        tabBtn.TextColor3 = Color3.fromRGB(120, 81, 169)
         tabBtn.TextSize = 14.000
         tabBtn.TextXAlignment = Enum.TextXAlignment.Left
 
         tabLogo.Name = "tabLogo"
         tabLogo.Position = UDim2.new(-0.007, 0,0.067, 0)
         tabLogo.Parent = tabBtnFrame
-        tabLogo.BackgroundColor3 = darkPurple
+        tabLogo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         tabLogo.BackgroundTransparency = 1.000
         tabLogo.BorderSizePixel = 0
         tabLogo.Size = UDim2.new(0, 25, 0, 25)
@@ -280,7 +280,7 @@ function Luxt1.CreateWindow(libName, logoId)
         newPage.Name = "newPage"..tabText
         newPage.Parent = pageFolder
         newPage.Active = true
-        newPage.BackgroundColor3 = darkPurple
+        newPage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         newPage.BackgroundTransparency = 1.000
         newPage.BorderSizePixel = 0
         newPage.Size = UDim2.new(1, 0, 1, 0)
@@ -332,7 +332,7 @@ function Luxt1.CreateWindow(libName, logoId)
                 ImageColor3 = Color3.fromRGB(153, 255, 238)
             }):Play()
             game.TweenService:Create(tabBtn, TweenInfo.new(0.18, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {
-                TextColor3 = Color3.fromRGB(153, 255, 238)
+                TextColor3 = Color3.fromRGB(120, 81, 169)
             }):Play()
         end)
 
@@ -371,20 +371,20 @@ function Luxt1.CreateWindow(libName, logoId)
 
             mainSectionHead.Name = "mainSectionHead"
             mainSectionHead.Parent = sectionFrame
-            mainSectionHead.BackgroundColor3 = darkPurple
+            mainSectionHead.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             mainSectionHead.BackgroundTransparency = 1.000
             mainSectionHead.BorderSizePixel = 0
             mainSectionHead.Size = UDim2.new(0, 381, 0, 36)
 
             sectionName.Name = "sectionName"
             sectionName.Parent = mainSectionHead
-            sectionName.BackgroundColor3 = darkPurple
+            sectionName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             sectionName.BackgroundTransparency = 1.000
             sectionName.Position = UDim2.new(0.0236220472, 0, 0, 0)
             sectionName.Size = UDim2.new(0, 302, 0, 36)
             sectionName.Font = Enum.Font.GothamSemibold
             sectionName.Text = sectionText
-            sectionName.TextColor3 = Color3.fromRGB(153, 255, 238)
+            sectionName.TextColor3 = Color3.fromRGB(120, 81, 169)
             sectionName.TextSize = 14.000
             sectionName.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -488,7 +488,6 @@ function Luxt1.CreateWindow(libName, logoId)
                 end)
                 
                 TextButton.MouseEnter:Connect(function()
-	button.BackgroundColor3 = hoverPurple
                     game.TweenService:Create(TextButton, TweenInfo.new(0.18, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),{
                         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
                         TextColor3 = Color3.fromRGB(250,250,250)
@@ -545,7 +544,7 @@ function Luxt1.CreateWindow(libName, logoId)
 
                     toggleInfo.Name = "toggleInfo"
                     toggleInfo.Parent = toggleFrame
-                    toggleInfo.BackgroundColor3 = darkPurple
+                    toggleInfo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                     toggleInfo.BackgroundTransparency = 1.000
                     toggleInfo.Position = UDim2.new(0.104109593, 0, 0, 0)
                     toggleInfo.Size = UDim2.new(0.254794508, 162, 1, 0)
@@ -580,7 +579,7 @@ function Luxt1.CreateWindow(libName, logoId)
                                 on = not on
                                  callback(on) 
                                 if on then
-                                    checkBtn.Parent.toggleInfo.TextColor3 = Color3.fromRGB(153, 255, 238)
+                                    checkBtn.Parent.toggleInfo.TextColor3 = Color3.fromRGB(120, 81, 169)
                                     checkBtn.ImageColor3 = Color3.fromRGB(153, 255, 238)
                                     checkBtn.ImageRectOffset = Vector2.new(4, 836)
                                     checkBtn.ImageRectSize = Vector2.new(48,48)
@@ -643,7 +642,7 @@ function Luxt1.CreateWindow(libName, logoId)
                         key.ZIndex = 2
                         key.Font = Enum.Font.GothamSemibold
                         key.Text = oldKey
-                        key.TextColor3 = Color3.fromRGB(153, 255, 238)
+                        key.TextColor3 = Color3.fromRGB(120, 81, 169)
                         key.TextSize = 14.000
 
                         UICorner_2.CornerRadius = UDim.new(0, 5)
@@ -651,14 +650,14 @@ function Luxt1.CreateWindow(libName, logoId)
 
                         keybindInfo.Name = "keybindInfo"
                         keybindInfo.Parent = keybindFrame
-                        keybindInfo.BackgroundColor3 = darkPurple
+                        keybindInfo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                         keybindInfo.BackgroundTransparency = 1.000
                         keybindInfo.Position = UDim2.new(0.320547938, 0, 0.166666672, 0)
                         keybindInfo.Size = UDim2.new(0, 239, 0, 22)
                         keybindInfo.ZIndex = 2
                         keybindInfo.Font = Enum.Font.GothamSemibold
                         keybindInfo.Text = keyInfo
-                        keybindInfo.TextColor3 = darkPurple
+                        keybindInfo.TextColor3 = Color3.fromRGB(255, 255, 255)
                         keybindInfo.TextSize = 13.000
                         keybindInfo.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -740,14 +739,14 @@ function Luxt1.CreateWindow(libName, logoId)
 
                             textboxInfo.Name = "textboxInfo"
                             textboxInfo.Parent = textboxFrame
-                            textboxInfo.BackgroundColor3 = darkPurple
+                            textboxInfo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                             textboxInfo.BackgroundTransparency = 1.000
                             textboxInfo.Position = UDim2.new(0.320547938, 0, 0.166666672, 0)
                             textboxInfo.Size = UDim2.new(0, 239, 0, 22)
                             textboxInfo.ZIndex = 2
                             textboxInfo.Font = Enum.Font.GothamSemibold
                             textboxInfo.Text = infbix
-                            textboxInfo.TextColor3 = darkPurple
+                            textboxInfo.TextColor3 = Color3.fromRGB(255, 255, 255)
                             textboxInfo.TextSize = 13.000
                             textboxInfo.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -761,7 +760,7 @@ function Luxt1.CreateWindow(libName, logoId)
                             TextBox.Font = Enum.Font.GothamSemibold
                             TextBox.PlaceholderColor3 = Color3.fromRGB(24, 24, 24)
                             TextBox.Text = ""
-                            TextBox.TextColor3 = bgBlack
+                            TextBox.TextColor3 = Color3.fromRGB(0, 0, 0)
                             TextBox.TextSize = 13.000
                             TextBox.PlaceholderText = textPlace
 
@@ -851,7 +850,7 @@ function Luxt1.CreateWindow(libName, logoId)
                                 sliderbtn.AutoButtonColor = false
                                 sliderbtn.Font = Enum.Font.SourceSans
                                 sliderbtn.Text = ""
-                                sliderbtn.TextColor3 = bgBlack
+                                sliderbtn.TextColor3 = Color3.fromRGB(0, 0, 0)
                                 sliderbtn.TextSize = 14.000
 
                                 UICorner_2.CornerRadius = UDim.new(0, 5)
@@ -875,7 +874,7 @@ function Luxt1.CreateWindow(libName, logoId)
                                 dragPrecent.ZIndex = 2
                                 dragPrecent.Font = Enum.Font.GothamSemibold
                                 dragPrecent.Text = "0%"
-                                dragPrecent.TextColor3 = darkPurple
+                                dragPrecent.TextColor3 = Color3.fromRGB(255, 255, 255)
                                 dragPrecent.TextSize = 12.000
                                 dragPrecent.BackgroundTransparency = 1
                                 dragPrecent.TextTransparency = 1
@@ -934,14 +933,14 @@ function Luxt1.CreateWindow(libName, logoId)
 
                                 sliderInfo.Name = "sliderInfo"
                                 sliderInfo.Parent = sliderFrame
-                                sliderInfo.BackgroundColor3 = darkPurple
+                                sliderInfo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                                 sliderInfo.BackgroundTransparency = 1.000
                                 sliderInfo.Position = UDim2.new(0.466095895, 0, 0, 0)
                                 sliderInfo.Size = UDim2.new(0, 193, 0, 36)
                                 sliderInfo.ZIndex = 2
                                 sliderInfo.Font = Enum.Font.GothamSemibold
                                 sliderInfo.Text = slidInfo
-                                sliderInfo.TextColor3 = darkPurple
+                                sliderInfo.TextColor3 = Color3.fromRGB(255, 255, 255)
                                 sliderInfo.TextSize = 14.000
                                 sliderInfo.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -1033,7 +1032,7 @@ function Luxt1.CreateWindow(libName, logoId)
                                 TextLabel.ZIndex = 2
                                 TextLabel.Font = Enum.Font.GothamSemibold
                                 TextLabel.Text = labelInfo
-                                TextLabel.TextColor3 = darkPurple
+                                TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
                                 TextLabel.TextSize = 14.000
 
                                 UICorner.CornerRadius = UDim.new(0, 5)
@@ -1064,7 +1063,7 @@ function Luxt1.CreateWindow(libName, logoId)
                                 TextLabel.ZIndex = 2
                                 TextLabel.Font = Enum.Font.Gotham
                                 TextLabel.Text = "  "..creditWho
-                                TextLabel.TextColor3 = darkPurple
+                                TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
                                 TextLabel.TextSize = 14.000
                                 TextLabel.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -1153,14 +1152,14 @@ function Luxt1.CreateWindow(libName, logoId)
 
                                     dropdownItem1.Name = "dropdownItem1"
                                     dropdownItem1.Parent = dropdownFrameMain
-                                    dropdownItem1.BackgroundColor3 = darkPurple
+                                    dropdownItem1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                                     dropdownItem1.BackgroundTransparency = 1.000
                                     dropdownItem1.Position = UDim2.new(0.0250000004, 0, 0.0833333358, 0)
                                     dropdownItem1.Size = UDim2.new(0, 293, 0, 30)
                                     dropdownItem1.ZIndex = 2
                                     dropdownItem1.Font = Enum.Font.GothamSemibold
                                     dropdownItem1.Text = dropInfo
-                                    dropdownItem1.TextColor3 = Color3.fromRGB(153, 255, 238)
+                                    dropdownItem1.TextColor3 = Color3.fromRGB(120, 81, 169)
                                     dropdownItem1.TextSize = 14.000
                                     dropdownItem1.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -1187,7 +1186,7 @@ function Luxt1.CreateWindow(libName, logoId)
 
                                         optionBtnFrame.Name = "optionBtnFrame"
                                         optionBtnFrame.Parent = dropdownFrame
-                                        optionBtnFrame.BackgroundColor3 = darkPurple
+                                        optionBtnFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
                                         optionBtnFrame.BackgroundTransparency = 1.000
                                         optionBtnFrame.BorderSizePixel = 0
                                         optionBtnFrame.Size = UDim2.new(0, 339, 0, 34)
@@ -1239,7 +1238,6 @@ function Luxt1.CreateWindow(libName, logoId)
                                         end)
                                         
                                         optionBtn1.MouseEnter:Connect(function()
-	button.BackgroundColor3 = hoverPurple
                                             game.TweenService:Create(optionBtn1, TweenInfo.new(0.18, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),{
                                                 BackgroundColor3 = Color3.fromRGB(15, 15, 15),
                                                 TextColor3 = Color3.fromRGB(250,250,250)
